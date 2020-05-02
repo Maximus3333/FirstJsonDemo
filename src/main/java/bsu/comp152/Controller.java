@@ -1,14 +1,18 @@
 package bsu.comp152;
 
 import javafx.beans.Observable;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextInputDialog;
 
 import java.net.URL;
+import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -20,6 +24,19 @@ public class Controller implements Initializable{
     @Override
     public void initialize(URL location, ResourceBundle resources){
         loadData();
+        ListControl.getSelectionModel().selectedItemProperty().addListener(
+                new ChangeListener<DataHandler.recipeDataType>() {
+                    @Override
+                    public void changed(ObservableValue<? extends DataHandler.recipeDataType> observableValue, DataHandler.recipeDataType recipeDataType, DataHandler.recipeDataType t1) {
+                        var recipe = ListControl.getSelectionModel().getSelectedItem();
+                        Alert recipeInfo = new Alert(Alert.AlertType.INFORMATION);
+                        recipeInfo.setTitle("Info for " + recipe.title);
+                        recipeInfo.setHeaderText("Ingredients:" + recipe.ingredients);
+                        recipeInfo.showAndWait();
+
+                    }
+                }
+        );
     }
 
     public void loadData(){
